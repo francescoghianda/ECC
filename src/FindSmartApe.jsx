@@ -39,28 +39,17 @@ export default function FindSmartApe() {
       [name]: value,
     });
 
-    const error = isNaN(value) ? "Insert a valid number" : "";
-    setErrors((prevErrors) => ({
+    //const error = isNaN(value) ? "Insert a valid number" : "";
+    /*setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
-    }));
+    }));*/
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const id = parseInt(formData.id);
-    if (isNaN(id)) {
-      alert("Please fill the field correctly.");
-      return;
-    }
-
-    const data = {
-      ...formData,
-      id,
-    };
-
-    findSmartAPE(client, data.id).then((smartApeData) => {
+    findSmartAPE(client, formData.id).then((smartApeData) => {
       console.log(smartApeData.id);
     });
   };
@@ -103,7 +92,7 @@ export default function FindSmartApe() {
             id="ape_id"
             name="id"
             variant="outlined"
-            type="number"
+            type="text"
             value={formData.id}
             onChange={handleInputChange}
             placeholder="Enter APE ID"
