@@ -25,16 +25,35 @@ export const sendHbar = async (client, fromAddress, toAddress, amount, operatorP
    console.log(`Transaction Status: ${transactionReceipt.status}`);
 }
 
-export const loadFile = async (client, file, operatorPrivateKey) => {
-  
+export const loadFile = async (client, file, operatorPrivateKey, setProgress) => {
+
   const chunks = getChunks(file, 1024);
+
+  let progress = 0;
+  const p = 0.9/chunks.length;
+
+  setProgress({
+    value: 0,
+    msg: `Loading smart contract (chunk ${0} of ${chunks.length}).`
+  })
 
   const fileId = await createFile(chunks[0], client, operatorPrivateKey);
 
+  progress += p;
+  setProgress({
+    value: progress,
+    msg: `Loading smart contract (chunk ${1} of ${chunks.length}).`
+  })
   console.log("File created. File ID: ", fileId);
 
   for (let i = 1; i < chunks.length; i++) {
       await appendChunk(chunks[i], fileId, client);
+
+      progress += p;
+      setProgress({
+        value: progress,
+        msg: `Loading smart contract (chunk ${i} of ${chunks.length}).`
+      })
   }
 
   console.log("File created. End.")
@@ -43,7 +62,7 @@ export const loadFile = async (client, file, operatorPrivateKey) => {
 }
 
 
-export const deploySmartAPE = (client, privateKey, apeData) => {
+export const deploySmartAPE = (client, privateKey, apeData, setProgress) => {
 
     const parameters = new ContractFunctionParameters()
             .addString(apeData.id)
@@ -63,11 +82,22 @@ export const deploySmartAPE = (client, privateKey, apeData) => {
       req.open('get', smartAPE , true);
       req.responseType = 'text';
       req.onload = function () { 
-        loadFile(client, req.response, privateKey)
+        loadFile(client, req.response, privateKey, setProgress)
           .then(fileId => {
+
+            setProgress({
+              value: 0.9,
+              msg: `Deploying smart contract.`
+            })
             
             deploySmartContract(client, fileId, parameters, 3_000_000)
               .then(contractId => {
+
+                setProgress({
+                  value: 1,
+                  msg: `Done.`
+                })
+
                 resolve(contractId);
               });
 
@@ -99,6 +129,7 @@ export const findSmartAPE = (client, contractId) => {
   return new Promise(async (resolve, reject) => {
 
     const apeId = (await callSmartContractFunction(client, contractId, "getApeId")).getString();
+    //const apeId = (await callSmartContractFunction(client, contractId, "getApeId")).getString();
 
     resolve({
 
@@ -129,9 +160,9 @@ const callSmartContractFunction = async (client, contractId, functionName, param
 
   console.log("The transaction consensus status is " +transactionStatus);
 
-  const query = await new TransactionRecordQuery()
+  const query = await (new TransactionRecordQuery()
     .setTransactionId(txResponse.transactionId)
-    .execute(client)
+    .execute(client));
 
   //console.log((await query).contractFunctionResult.getString())
 
