@@ -141,7 +141,7 @@ export const findSmartAPE = (client, contractId) => {
     const hash = (await callSmartContractFunction(client, contractId, "getDocumentHash")).getString();
     const hashAlgorithm = (await callSmartContractFunction(client, contractId, "getHashAlgorithm")).getString();
 
-    const reasonString = "";
+    let reasonString = "";
 
     switch(reason) {
       case 0:
