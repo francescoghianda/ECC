@@ -130,9 +130,9 @@ export const findSmartAPE = (client, contractId) => {
 
     const apeId = (await callSmartContractFunction(client, contractId, "getApeId")).getString();
     const status = (await callSmartContractFunction(client, contractId, "getStatus")).getInt8();
-    const expirationDate = (await callSmartContractFunction(client, contractId, "getExpirationDate")).getInt256();
-    const latitude = (await callSmartContractFunction(client, contractId, "getLatitude")).getInt256();
-    const longitude = (await callSmartContractFunction(client, contractId, "getLongitude")).getInt256();
+    const expirationDate = (await callSmartContractFunction(client, contractId, "getExpirationDate")).getInt256().toNumber();
+    const latitude = (await callSmartContractFunction(client, contractId, "getLatitude")).getInt256().toNumber();
+    const longitude = (await callSmartContractFunction(client, contractId, "getLongitude")).getInt256().toNumber();
     const address = (await callSmartContractFunction(client, contractId, "getAddress")).getString();
     const yearOfConstruction = (await callSmartContractFunction(client, contractId, "getYearOfConstruction")).getInt32();
     const previuos = (await callSmartContractFunction(client, contractId, "getPreviousDocument")).getAddress();
