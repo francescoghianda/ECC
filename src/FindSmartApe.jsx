@@ -1,12 +1,22 @@
 import { AccountId, Client, PrivateKey } from "@hashgraph/sdk";
-import { Button, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Backdrop,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
 import { useContext, useState } from "react";
 import { GlobalAppContext } from "./contexts/GlobalAppContext";
 import { findSmartAPE } from "./services/hederaService";
 
 export default function FindSmartApe() {
   const { metamaskAccountAddress } = useContext(GlobalAppContext);
-
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   if (
     !process.env.REACT_APP_MY_ACCOUNT_ID ||
     !process.env.REACT_APP_MY_PRIVATE_KEY
@@ -27,7 +37,6 @@ export default function FindSmartApe() {
   const [formData, setFormData] = useState({
     id: "",
   });
-  const [found, setFound] = useState(false);
   const [smartApe, setSmartApe] = useState({
     id: "",
     expirationDate: "",
@@ -57,15 +66,19 @@ export default function FindSmartApe() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
-    findSmartAPE(client, formData.id).then((smartApeData) => {
+    findSmartAPE(client, formData.id, setProgress).then((smartApeData) => {
+      setLoading(false);
       console.log(smartApeData.id);
       setSmartApe({
         id: smartApeData.id,
         status: smartApeData.status === 0 ? "valid" : "expired",
-        expirationDate: new Date(smartApeData.expirationDate).toLocaleDateString("en-US"),
-        latitude: smartApeData.latitude/100000000,
-        longitude: smartApeData.longitude/100000000,
+        expirationDate: new Date(
+          smartApeData.expirationDate
+        ).toLocaleDateString("en-US"),
+        latitude: smartApeData.latitude / 100000000,
+        longitude: smartApeData.longitude / 100000000,
         address: smartApeData.address,
         yearOfConstruction: smartApeData.yearOfConstruction,
         previous: smartApeData.previuos,
@@ -73,7 +86,6 @@ export default function FindSmartApe() {
         hash: smartApeData.hash,
         hashAlgorithm: smartApeData.hashAlgorithm,
       });
-      setFound(true);
     });
   };
 
@@ -147,9 +159,20 @@ export default function FindSmartApe() {
           >
             Find SmartAPE
           </Button>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={loading}
+          >
+            <Stack alignItems="center">
+              <CircularProgress color="inherit" />
+              <Typography style={{ fontSize: "2rem" }}>
+                {parseInt(progress * 100)}%
+              </Typography>
+            </Stack>
+          </Backdrop>
         </div>
 
-        {found && (
+        {!loading && (
           <div
             style={{
               display: "grid",
