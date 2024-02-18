@@ -139,8 +139,40 @@ contract SmartAPE {
         return buildingData;
     }
 
+    function getLatitude() external view returns (uint256) {
+        return buildingData.location.lat;
+    }
+
+    function getLongitude() external view returns (uint256) {
+        return buildingData.location.long;
+    }
+
+    function getAddress() external view returns (string memory) {
+        return buildingData._address;
+    }
+
+    function getYearOfConstruction() external view returns (uint) {
+        return buildingData.yearOfConstruction;
+    }
+
     function getPreviousDocument() public view returns (SmartAPE) {
         return prev;
+    }
+
+    function getReason() public view returns(Reason) {
+        return reason;
+    }
+
+    function getOtherReason() public view returns(string memory) {
+        return otherReason;
+    }
+
+    function getDocumentHash() public view returns(string memory) {
+        return documentHash;
+    }
+
+    function getHashAlgorithm() public view returns(string memory) {
+        return hashAlgorithm;
     }
 
     function getDeployTime() external view /*onlyOwner*/ returns (uint) {

@@ -50,7 +50,8 @@ export default function FindSmartApe() {
     event.preventDefault();
 
     findSmartAPE(client, formData.id).then((smartApeData) => {
-      console.log(smartApeData.id);
+      console.log(smartApeData);
+      
     });
   };
 
