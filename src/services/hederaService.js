@@ -124,22 +124,49 @@ const deploySmartContract = async (client, bytecodeFileId, parameters, gas) => {
   return contractId;
 }
 
-export const findSmartAPE = (client, contractId) => {
+export const findSmartAPE = (client, contractId, setProgress) => {
 
   return new Promise(async (resolve, reject) => {
 
+    const p = 1/12;
+    let progress = 0;
+
     const apeId = (await callSmartContractFunction(client, contractId, "getApeId")).getString();
+    progress += p;
+    setProgress(progress);
     const status = (await callSmartContractFunction(client, contractId, "getStatus")).getInt8();
+    progress += p;
+    setProgress(progress);
     const expirationDate = (await callSmartContractFunction(client, contractId, "getExpirationDate")).getInt256().toNumber();
+    progress += p;
+    setProgress(progress);
     const latitude = (await callSmartContractFunction(client, contractId, "getLatitude")).getInt256().toNumber();
+    progress += p;
+    setProgress(progress);
     const longitude = (await callSmartContractFunction(client, contractId, "getLongitude")).getInt256().toNumber();
+    progress += p;
+    setProgress(progress);
     const address = (await callSmartContractFunction(client, contractId, "getAddress")).getString();
+    progress += p;
+    setProgress(progress);
     const yearOfConstruction = (await callSmartContractFunction(client, contractId, "getYearOfConstruction")).getInt32();
+    progress += p;
+    setProgress(progress);
     const previuos = (await callSmartContractFunction(client, contractId, "getPreviousDocument")).getAddress();
+    progress += p;
+    setProgress(progress);
     const reason = (await callSmartContractFunction(client, contractId, "getReason")).getInt8();
+    progress += p;
+    setProgress(progress);
     const otherReason = (await callSmartContractFunction(client, contractId, "getOtherReason")).getString();
+    progress += p;
+    setProgress(progress);
     const hash = (await callSmartContractFunction(client, contractId, "getDocumentHash")).getString();
+    progress += p;
+    setProgress(progress);
     const hashAlgorithm = (await callSmartContractFunction(client, contractId, "getHashAlgorithm")).getString();
+
+    setProgress(1);
 
     let reasonString = "";
 
