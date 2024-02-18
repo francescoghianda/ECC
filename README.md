@@ -34,7 +34,9 @@ After cloning the repository, follow these steps to install dependencies and run
 6. Once the installation of dependencies is complete, start the application with the command:
    `npm run start`
 
-The application will start and be accessible from your browser at `http://localhost:3000`.
+The application will start and be accessible from your browser at `http://localhost:3000`. 
+At this page, you can deploy a document which will be stored on the blockchain and it will return an ID.
+At `http://localhost:3000/findSmartApe`, you can find a deployed smart contract linked to a specific (APE) document.
 
 ## Contact
 
