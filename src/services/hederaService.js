@@ -141,6 +141,28 @@ export const findSmartAPE = (client, contractId) => {
     const hash = (await callSmartContractFunction(client, contractId, "getDocumentHash")).getString();
     const hashAlgorithm = (await callSmartContractFunction(client, contractId, "getHashAlgorithm")).getString();
 
+    const reasonString = "";
+
+    switch(reason) {
+      case 0:
+        reasonString = "New construction";
+        break;
+      case 1:
+        reasonString = "Changed property";
+        break;
+      case 2:
+        reasonString = "Leased";
+        break;
+      case 3:
+        reasonString = "Renovation";
+        break;
+      case 4:
+        reasonString = "Energy requalification";
+        break;
+      default:
+        reasonString = otherReason
+    }
+
 
     resolve({
 
@@ -152,8 +174,7 @@ export const findSmartAPE = (client, contractId) => {
       address: address,
       yearOfConstruction: yearOfConstruction,
       previous: previuos,
-      reason: reason,
-      otherReason: otherReason,
+      reason: reasonString,
       hash: hash,
       hashAlgorithm: hashAlgorithm
 
