@@ -1,11 +1,7 @@
-import { AppBar, Button, Toolbar, Typography } from '@mui/material';
-import { useContext } from 'react';
-import { GlobalAppContext } from '../contexts/GlobalAppContext';
-import { connectToMetamask } from '../services/metamaskService';
-
+import { AppBar, Button, Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
-
   /*const { metamaskAccountAddress, setMetamaskAccountAddress } = useContext(GlobalAppContext);
 
   const retrieveWalletAddress = async () => {
@@ -17,25 +13,21 @@ export default function NavBar() {
   }*/
 
   return (
-    <AppBar
-      position="relative" color='primary'>
+    <AppBar position="relative" color="primary">
       <Toolbar>
-        <Button
-        variant='contained'
-        color='secondary'
-        >
-          Deploy SmartAPE
-        </Button>
-
-        <Button
-        variant='contained'
-        color='secondary'
-        >
-          Find SmartAPE
-        </Button>
+        <Link to="/">
+          <Button variant="contained" color="secondary">
+            Deploy SmartAPE
+          </Button>
+        </Link>
+        <Link to="/FindSmartApe">
+          <Button variant="contained" color="secondary">
+            Find SmartAPE
+          </Button>
+        </Link>
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
 /*

@@ -130,6 +130,7 @@ export const findSmartAPE = (client, contractId, setProgress) => {
 
     const p = 1/12;
     let progress = 0;
+    setProgress(0);
 
     const apeId = (await callSmartContractFunction(client, contractId, "getApeId")).getString();
     progress += p;
@@ -190,6 +191,8 @@ export const findSmartAPE = (client, contractId, setProgress) => {
         reasonString = otherReason
     }
 
+    console.log(previuos)
+
 
     resolve({
 
@@ -200,7 +203,7 @@ export const findSmartAPE = (client, contractId, setProgress) => {
       longitude: longitude,
       address: address,
       yearOfConstruction: yearOfConstruction,
-      previous: previuos,
+      previuos: previuos,
       reason: reasonString,
       hash: hash,
       hashAlgorithm: hashAlgorithm

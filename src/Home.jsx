@@ -24,7 +24,7 @@ export default function Home() {
   const [contractId, setContractId] = useState("");
   const [errors, setErrors] = useState({});
 
-  const [progress, setProgress] = useState({value: 0, msg: ""});
+  const [progress, setProgress] = useState({ value: 0, msg: "" });
 
   if (
     !process.env.REACT_APP_MY_ACCOUNT_ID ||
@@ -103,7 +103,7 @@ export default function Home() {
     if (
       isNaN(id) ||
       isNaN(inputDate.getTime()) ||
-      inputDate <= currentDate  || 
+      inputDate <= currentDate ||
       isNaN(expirationDate) ||
       isNaN(latitude) ||
       isNaN(longitude) ||
@@ -130,10 +130,12 @@ export default function Home() {
     data.documentHash = documentHash;
     data.hashAlgorithm = "SHA-256";
 
-    deploySmartAPE(client, myPrivateKey, data, setProgress).then((contractId) => {
-      setLoading(false);
-      setContractId(contractId.toString());
-    });
+    deploySmartAPE(client, myPrivateKey, data, setProgress).then(
+      (contractId) => {
+        setLoading(false);
+        setContractId(contractId.toString());
+      }
+    );
   };
 
   const handleReset = () => {
@@ -333,7 +335,7 @@ export default function Home() {
               fullWidth
               style={{ height: "56px" }}
             >
-              Select Document
+              {formData.doc ? formData.doc.name : "Select Document"}
             </Button>
           </label>
         </div>
@@ -361,17 +363,15 @@ export default function Home() {
             Deploy SmartAPE
           </Button>
           <Backdrop
-            sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={loading}
           >
             <Stack alignItems="center">
-            <CircularProgress color="inherit" />
-            <Typography style={{fontSize: '2rem'}}>
-              {parseInt(progress.value*100)}%
-            </Typography>
-            <Typography>
-              {progress.msg}
-            </Typography>
+              <CircularProgress color="inherit" />
+              <Typography style={{ fontSize: "2rem" }}>
+                {parseInt(progress.value * 100)}%
+              </Typography>
+              <Typography>{progress.msg}</Typography>
             </Stack>
           </Backdrop>
         </div>

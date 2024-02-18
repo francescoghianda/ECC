@@ -16,6 +16,7 @@ import { findSmartAPE } from "./services/hederaService";
 export default function FindSmartApe() {
   const { metamaskAccountAddress } = useContext(GlobalAppContext);
   const [loading, setLoading] = useState(false);
+  const [found, setFound] = useState(false);
   const [progress, setProgress] = useState(0);
   if (
     !process.env.REACT_APP_MY_ACCOUNT_ID ||
@@ -46,6 +47,7 @@ export default function FindSmartApe() {
     yearOfConstruction: 0,
     reason: "",
     status: 0,
+    previuos: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -70,6 +72,7 @@ export default function FindSmartApe() {
 
     findSmartAPE(client, formData.id, setProgress).then((smartApeData) => {
       setLoading(false);
+      setFound(true);
       console.log(smartApeData.id);
       setSmartApe({
         id: smartApeData.id,
@@ -81,10 +84,10 @@ export default function FindSmartApe() {
         longitude: smartApeData.longitude / 100000000,
         address: smartApeData.address,
         yearOfConstruction: smartApeData.yearOfConstruction,
-        previous: smartApeData.previuos,
         reason: smartApeData.reason,
         hash: smartApeData.hash,
         hashAlgorithm: smartApeData.hashAlgorithm,
+        previuos: smartApeData.previuos,
       });
     });
   };
@@ -172,7 +175,7 @@ export default function FindSmartApe() {
           </Backdrop>
         </div>
 
-        {!loading && (
+        {!loading && found && (
           <div
             style={{
               display: "grid",
@@ -199,8 +202,12 @@ export default function FindSmartApe() {
             <Typography>{smartApe.hashAlgorithm}</Typography>
             <Typography fontWeight="bold">Status</Typography>
             <Typography>{smartApe.status}</Typography>
-            <Typography fontWeight="bold"></Typography>
-            <Typography fontWeight="bold"></Typography>
+            <Typography></Typography>
+            <Typography></Typography>
+            <Typography fontWeight="bold">Previous</Typography>
+            <Typography style={{ gridColumn: "2/span 3", fontSize: "0.8rem" }}>
+              {smartApe.previuos}
+            </Typography>
             <Typography fontWeight="bold">Hash</Typography>
             <Typography style={{ gridColumn: "2/span 3", fontSize: "0.8rem" }}>
               {smartApe.hash}
