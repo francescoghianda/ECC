@@ -3,7 +3,6 @@ import { Button, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { GlobalAppContext } from "./contexts/GlobalAppContext";
 import { findSmartAPE } from "./services/hederaService";
-import { calcolateFileHash } from "./services/utils";
 
 export default function FindSmartApe() {
   const { metamaskAccountAddress } = useContext(GlobalAppContext);
@@ -28,7 +27,17 @@ export default function FindSmartApe() {
   const [formData, setFormData] = useState({
     id: "",
   });
-  const [contractId, setContractId] = useState("");
+  const [found, setFound] = useState(false);
+  const [smartApe, setSmartApe] = useState({
+    id: "",
+    expirationDate: "",
+    latitude: 0,
+    longitude: 0,
+    address: "",
+    yearOfConstruction: 0,
+    reason: "",
+    status: 0,
+  });
 
   const [errors, setErrors] = useState({});
 
@@ -50,8 +59,21 @@ export default function FindSmartApe() {
     event.preventDefault();
 
     findSmartAPE(client, formData.id).then((smartApeData) => {
-      console.log(smartApeData);
-      
+      console.log(smartApeData.id);
+      setSmartApe({
+        id: smartApeData.id,
+        status: smartApeData.status === 0 ? "valid" : "expired",
+        expirationDate: new Date(smartApeData.expirationDate).toLocaleDateString("en-US"),
+        latitude: smartApeData.latitude/100000000,
+        longitude: smartApeData.longitude/100000000,
+        address: smartApeData.address,
+        yearOfConstruction: smartApeData.yearOfConstruction,
+        previous: smartApeData.previuos,
+        reason: smartApeData.reason,
+        hash: smartApeData.hash,
+        hashAlgorithm: smartApeData.hashAlgorithm,
+      });
+      setFound(true);
     });
   };
 
@@ -126,11 +148,42 @@ export default function FindSmartApe() {
             Find SmartAPE
           </Button>
         </div>
-        {contractId.length !== 0 && (
-        <Typography color="white">
-          The new contract ID is: {contractId}
-        </Typography>
-      )}
+
+        {found && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto auto auto auto",
+              columnGap: "1rem",
+              rowGap: "2rem",
+            }}
+          >
+            <Typography fontWeight="bold">APE ID</Typography>
+            <Typography>{smartApe.id}</Typography>
+            <Typography fontWeight="bold">Year of construction</Typography>
+            <Typography>{smartApe.yearOfConstruction}</Typography>
+            <Typography fontWeight="bold">Address</Typography>
+            <Typography>{smartApe.address}</Typography>
+            <Typography fontWeight="bold">Latitude</Typography>
+            <Typography>{smartApe.latitude}</Typography>
+            <Typography fontWeight="bold">Expiration Date</Typography>
+            <Typography>{smartApe.expirationDate}</Typography>
+            <Typography fontWeight="bold">Longitude</Typography>
+            <Typography>{smartApe.longitude}</Typography>
+            <Typography fontWeight="bold">Reason</Typography>
+            <Typography>{smartApe.reason}</Typography>
+            <Typography fontWeight="bold">Hash Algorithm</Typography>
+            <Typography>{smartApe.hashAlgorithm}</Typography>
+            <Typography fontWeight="bold">Status</Typography>
+            <Typography>{smartApe.status}</Typography>
+            <Typography fontWeight="bold"></Typography>
+            <Typography fontWeight="bold"></Typography>
+            <Typography fontWeight="bold">Hash</Typography>
+            <Typography style={{ gridColumn: "2/span 3", fontSize: "0.8rem" }}>
+              {smartApe.hash}
+            </Typography>
+          </div>
+        )}
       </form>
     </div>
   );
