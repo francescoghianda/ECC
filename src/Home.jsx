@@ -53,6 +53,7 @@ export default function Home() {
     reason: "0",
     otherReason: "",
     doc: null,
+    previous: "",
   });
 
   const handleInputChange = (event) => {
@@ -99,6 +100,7 @@ export default function Home() {
     const yearOfConstruction = parseInt(formData.yearOfConstruction);
     const reason = parseInt(formData.reason);
     const otherReason = formData.otherReason;
+    const previous = formData.previous;
 
     if (
       isNaN(id) ||
@@ -123,6 +125,7 @@ export default function Home() {
       longitude,
       yearOfConstruction,
       reason,
+      previous,
     };
 
     const documentHash = await calcolateFileHash(data.doc);
@@ -149,6 +152,7 @@ export default function Home() {
       reason: "0",
       otherReason: "",
       doc: null,
+      previous: "",
     });
     setContractId("");
     setErrors({});
@@ -240,6 +244,20 @@ export default function Home() {
             fullWidth
             error={!!errors.longitude}
             helperText={errors.longitude}
+          />
+
+          <Typography style={labelTypographyStyle}>
+            Previous APE
+          </Typography>
+          <TextField
+            id="previous"
+            name="previous"
+            variant="outlined"
+            type="text"
+            value={formData.previous}
+            onChange={handleInputChange}
+            placeholder="Previous SmartAPE address"
+            fullWidth
           />
         </div>
 
@@ -338,7 +356,10 @@ export default function Home() {
               {formData.doc ? formData.doc.name : "Select Document"}
             </Button>
           </label>
+
         </div>
+
+        
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button

@@ -91,7 +91,28 @@ export const deploySmartAPE = (client, privateKey, apeData, setProgress) => {
             })
             
             deploySmartContract(client, fileId, parameters, 3_000_000)
-              .then(contractId => {
+              .then(async contractId => {
+
+                if (apeData.previous && apeData.previous.length > 0) {
+
+                  setProgress({
+                    value: 0.95,
+                    msg: `Setting previous document address.`
+                  })
+
+                  if (apeData.previous.startsWith("0.0.")) {
+                    let dec = parseInt(apeData.previous.substring(4));
+                    let hex = dec.toString(16);
+                    apeData.previous = "0x" + getZeros(40-hex.length) + hex;
+                  }
+
+                  console.log(apeData.previous);
+
+                  const parameters = new ContractFunctionParameters()
+                        .addAddress(apeData.previous)
+                      
+                  const result = await callSmartContractFunction(client, contractId, "setPreviousDocument", parameters);
+                }
 
                 setProgress({
                   value: 1,
@@ -107,6 +128,14 @@ export const deploySmartAPE = (client, privateKey, apeData, setProgress) => {
     })
 
 
+}
+
+const getZeros = (num) => {
+  let s = "";
+  for(let i = 0; i < num; i++) {
+    s += "0";
+  }
+  return s;
 }
 
 const deploySmartContract = async (client, bytecodeFileId, parameters, gas) => {

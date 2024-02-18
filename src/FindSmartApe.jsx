@@ -206,7 +206,7 @@ export default function FindSmartApe() {
             <Typography></Typography>
             <Typography fontWeight="bold">Previous</Typography>
             <Typography style={{ gridColumn: "2/span 3", fontSize: "0.8rem" }}>
-              {smartApe.previuos}
+              {smartApe.previuos} {parseInt(smartApe.previuos) != 0 ? `(0.0.${parseInt(smartApe.previuos, 16)})` : ""}
             </Typography>
             <Typography fontWeight="bold">Hash</Typography>
             <Typography style={{ gridColumn: "2/span 3", fontSize: "0.8rem" }}>
